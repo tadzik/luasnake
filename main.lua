@@ -1,10 +1,4 @@
---
--- our board
--- 0 -- empty
--- 1 -- steady piece
--- 2 -- moving piece
 map         = {}
------------------ x  y
 lastUpdate   = -1
 
 -- various constants
@@ -16,7 +10,6 @@ width    = 20
 window_h = 640
 window_w = 640
 
--- snake
 snake = { { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 } }
 --   1
 -- 2 3 4
