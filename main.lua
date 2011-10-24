@@ -21,6 +21,7 @@ snake = { { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 } }
 --   1
 -- 2 3 4
 direction = 1
+newdir    = 1
 hasapple  = false
 justate   = false
 
@@ -73,8 +74,8 @@ end
 
 function putapple()
     while not hasapple do
-        local x = math.random(width) + 1
-        local y = math.random(height) + 1
+        local x = math.random(1, width)
+        local y = math.random(1, height)
         if map[y][x] == 0 then
             map[y][x] = 2
             break
@@ -101,15 +102,15 @@ end
 function love.update(dt)
     if direction == 1 or direction == 3 then
         if love.keyboard.isDown("left") then
-            direction = 2
+            newdir = 2
         elseif love.keyboard.isDown("right") then
-            direction = 4
+            newdir = 4
         end
     else
         if love.keyboard.isDown("up") then
-            direction = 1
+            newdir = 1
         elseif love.keyboard.isDown("down") then
-            direction = 3
+            newdir = 3
         end
     end
 
@@ -118,7 +119,8 @@ function love.update(dt)
         hasapple = true
     end
 
-    if love.timer.getTime() - lastUpdate >= 0.2 then
+    if love.timer.getTime() - lastUpdate >= 0.1 then
+        direction = newdir
         movesnake()
         lastUpdate = love.timer.getTime()
     end
