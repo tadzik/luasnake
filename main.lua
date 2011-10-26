@@ -12,10 +12,8 @@ window_w = 640
 points   = 0
 
 snake = { { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 } }
---   1
--- 2 3 4
-direction = 1
-newdir    = 1
+direction = { 0, 1 }
+newdir    = direction
 hasapple  = false
 justate   = false
 
@@ -41,15 +39,8 @@ function movesnake()
     local last = snake[table.maxn(snake)]
     -- poor man's deepcopy()
     local new = { last[1], last[2] }
-    if direction == 1 then     -- up
-        new[2] = new[2] + 1
-    elseif direction == 2 then -- left
-        new[1] = new[1] - 1
-    elseif direction == 3 then -- down
-        new[2] = new[2] - 1
-    else                       -- right
-        new[1] = new[1] + 1
-    end
+
+    new = { new[1] + direction[1], new[2] + direction[2] }
 
     if new[2] < 1 or new[2] > height
     or new[1] < 1 or new[1] > width
@@ -95,17 +86,17 @@ function love.load()
 end
 
 function love.update(dt)
-    if direction == 1 or direction == 3 then
+    if direction[1] == 0 then
         if love.keyboard.isDown("left") then
-            newdir = 2
+            newdir = { -1, 0 }
         elseif love.keyboard.isDown("right") then
-            newdir = 4
+            newdir = { 1, 0 }
         end
     else
         if love.keyboard.isDown("up") then
-            newdir = 1
+            newdir = { 0, 1 }
         elseif love.keyboard.isDown("down") then
-            newdir = 3
+            newdir = { 0, -1 }
         end
     end
 
