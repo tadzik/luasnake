@@ -9,6 +9,7 @@ height   = 20
 width    = 20
 window_h = 640
 window_w = 640
+points   = 0
 
 snake = { { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 } }
 --   1
@@ -60,6 +61,7 @@ function movesnake()
     if map[new[2]][new[1]] == 2 then
         justate  = true
         hasapple = false
+        points   = points + 1
     end
 
     table.insert(snake, new)
@@ -138,4 +140,6 @@ function love.draw()
             end
         end
     end
+
+    love.graphics.print("Punkty " .. points, 10, window_h - 20)
 end
