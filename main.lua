@@ -16,6 +16,7 @@ direction = { 0, 1 }
 newdir    = direction
 hasapple  = false
 justate   = false
+trollface = love.graphics.newImage("trollface.png")
 
 function coordsToPix(x, y)
     x = piece_a * (x - 1) + margin
@@ -23,10 +24,33 @@ function coordsToPix(x, y)
     return x, y
 end
 
-function snaketomap()
-    for i,v in ipairs(snake) do
-        map[v[2]][v[1]] = 1
+function drawMap()
+    local function snaketomap()
+        for i,v in ipairs(snake) do
+            map[v[2]][v[1]] = 1
+        end
     end
+
+    snaketomap()
+
+    -- draw the map
+    for i = 1, height do
+        for j = 1, width do
+            if map[i][j] == 1 then
+                x, y = coordsToPix(j, i)
+                love.graphics.rectangle("fill", x, y, piece_a, piece_a)
+            elseif map[i][j] == 2 then
+                x, y = coordsToPix(j, i)
+                love.graphics.rectangle("line", x, y, piece_a, piece_a)
+            end
+        end
+    end
+end
+
+function drawTrollface()
+    love.graphics.setColorMode("replace")
+    love.graphics.draw(trollface, 45 + margin, 40 + margin)
+    love.graphics.setColorMode("modulate")
 end
 
 function movesnake()
@@ -46,7 +70,8 @@ function movesnake()
     or new[1] < 1 or new[1] > width
     or map[new[2]][new[1]] == 1
     then
-        os.exit(0)
+        love.update = function() end
+        drawMap     = drawTrollface
     end
     
     if map[new[2]][new[1]] == 2 then
@@ -117,20 +142,7 @@ function love.draw()
     love.graphics.rectangle("line", margin, margin,
                             width * piece_a, height * piece_a)
 
-    snaketomap()
-
-    -- draw the map
-    for i = 1, height do
-        for j = 1, width do
-            if map[i][j] == 1 then
-                x, y = coordsToPix(j, i)
-                love.graphics.rectangle("fill", x, y, piece_a, piece_a)
-            elseif map[i][j] == 2 then
-                x, y = coordsToPix(j, i)
-                love.graphics.rectangle("line", x, y, piece_a, piece_a)
-            end
-        end
-    end
+    drawMap()
 
     love.graphics.print("Punkty " .. points, 10, window_h - 20)
 end
