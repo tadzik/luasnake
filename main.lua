@@ -18,10 +18,10 @@ hasapple  = false
 justate   = false
 trollface = love.graphics.newImage("trollface.png")
 
-function coordsToPix(x, y)
-    x = piece_a * (x - 1) + margin
-    y = (height - y) * piece_a + margin
-    return x, y
+function drawPiece(x, y, type)
+    x = margin + piece_a * (x - 1)
+    y = margin + piece_a * (height - y)
+    love.graphics.rectangle(type, x, y, piece_a, piece_a)
 end
 
 function drawMap()
@@ -32,11 +32,9 @@ function drawMap()
     for i = 1, height do
         for j = 1, width do
             if map[i][j] == 1 then
-                x, y = coordsToPix(j, i)
-                love.graphics.rectangle("fill", x, y, piece_a, piece_a)
+                drawPiece(j, i, "fill")
             elseif map[i][j] == 2 then
-                x, y = coordsToPix(j, i)
-                love.graphics.rectangle("line", x, y, piece_a, piece_a)
+                drawPiece(j, i, "line")
             end
         end
     end
@@ -91,14 +89,14 @@ end
 
 function love.load()
     math.randomseed(os.time())
-    -- initialize the board
+
     for i = 1, height do
         map[i] = {}
         for j = 1, width do
             map[i][j] = 0
         end
     end
-    --
+
     love.graphics.setMode(window_w, window_h)
     love.graphics.setBackgroundColor(200, 200, 200)
     love.graphics.setColor(0, 0, 0)
@@ -133,7 +131,6 @@ function love.update(dt)
 end
 
 function love.draw()
-    -- border
     love.graphics.rectangle("line", margin, margin,
                             width * piece_a, height * piece_a)
 
