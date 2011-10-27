@@ -25,15 +25,10 @@ function coordsToPix(x, y)
 end
 
 function drawMap()
-    local function snaketomap()
-        for i,v in ipairs(snake) do
-            map[v[2]][v[1]] = 1
-        end
+    for i,v in ipairs(snake) do
+        map[v[2]][v[1]] = 1
     end
 
-    snaketomap()
-
-    -- draw the map
     for i = 1, height do
         for j = 1, width do
             if map[i][j] == 1 then
