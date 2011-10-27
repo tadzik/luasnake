@@ -15,6 +15,9 @@ width     = 20
 window_h  = 640
 window_w  = 640
 trollface = love.graphics.newImage("trollface.png")
+NOTHING   = 0
+SNAKE     = 1
+APPLE     = 2
 
 function drawPiece(x, y, type)
     x = margin + piece_a * (x - 1)
@@ -24,14 +27,14 @@ end
 
 function drawMap()
     for i,v in ipairs(snake) do
-        map[v[2]][v[1]] = 1
+        map[v[2]][v[1]] = SNAKE
     end
 
     for i = 1, height do
         for j = 1, width do
-            if map[i][j] == 1 then
+            if map[i][j] == SNAKE then
                 drawPiece(j, i, "fill")
-            elseif map[i][j] == 2 then
+            elseif map[i][j] == APPLE then
                 drawPiece(j, i, "line")
             end
         end
@@ -47,7 +50,7 @@ end
 function movesnake()
     if justate == false then
         local tail = table.remove(snake, 1)
-        map[tail[2]][tail[1]] = 0
+        map[tail[2]][tail[1]] = NOTHING
     end
     justate = false
 
@@ -57,14 +60,14 @@ function movesnake()
 
     if new[2] < 1 or new[2] > height
     or new[1] < 1 or new[1] > width
-    or map[new[2]][new[1]] == 1
+    or map[new[2]][new[1]] == SNAKE
     then
         love.update = function() end
         drawMap     = drawTrollface
         return
     end
     
-    if map[new[2]][new[1]] == 2 then
+    if map[new[2]][new[1]] == APPLE then
         justate  = true
         hasapple = false
         points   = points + 1
@@ -78,7 +81,7 @@ function putapple()
         local x = math.random(1, width)
         local y = math.random(1, height)
         if map[y][x] == 0 then
-            map[y][x] = 2
+            map[y][x] = APPLE
             break
         end
     end
@@ -90,7 +93,7 @@ function love.load()
     for i = 1, height do
         map[i] = {}
         for j = 1, width do
-            map[i][j] = 0
+            map[i][j] = NOTHING
         end
     end
 
