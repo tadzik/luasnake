@@ -65,6 +65,7 @@ function movesnake()
     then
         love.update = function() end
         drawMap     = drawTrollface
+        return
     end
     
     if map[new[2]][new[1]] == 2 then
