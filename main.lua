@@ -1,21 +1,19 @@
 map         = {}
-lastUpdate   = -1
+snake       = { { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 } }
+direction   = { 1, 0 }
+newdir      = direction
+lastUpdate  = 0
+hasapple    = false
+justate     = false
+points      = 0
 
--- various constants
-piece_a  = 30
-border_w = 2
-margin   = 10
-height   = 20
-width    = 20
-window_h = 640
-window_w = 640
-points   = 0
-
-snake = { { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 } }
-direction = { 0, 1 }
-newdir    = direction
-hasapple  = false
-justate   = false
+piece_a   = 30
+border_w  = 2
+margin    = 10
+height    = 20
+width     = 20
+window_h  = 640
+window_w  = 640
 trollface = love.graphics.newImage("trollface.png")
 
 function drawPiece(x, y, type)
@@ -54,10 +52,8 @@ function movesnake()
     justate = false
 
     local last = snake[table.maxn(snake)]
-    -- poor man's deepcopy()
-    local new = { last[1], last[2] }
 
-    new = { new[1] + direction[1], new[2] + direction[2] }
+    local new = { last[1] + direction[1], last[2] + direction[2] }
 
     if new[2] < 1 or new[2] > height
     or new[1] < 1 or new[1] > width
@@ -119,23 +115,20 @@ function love.update(dt)
         end
     end
 
-    if hasapple == false then
-        putapple()
-        hasapple = true
-    end
-
     if love.timer.getTime() - lastUpdate >= 0.1 then
         direction = newdir
         movesnake()
         lastUpdate = love.timer.getTime()
+        if hasapple == false then
+            putapple()
+            hasapple = true
+        end
     end
 end
 
 function love.draw()
     love.graphics.rectangle("line", margin, margin,
                             width * piece_a, height * piece_a)
-
     drawMap()
-
     love.graphics.print("Punkty " .. points, 10, window_h - 20)
 end
