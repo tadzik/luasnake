@@ -2,6 +2,7 @@ map         = {}
 direction   = { 1, 0 }
 newdir      = direction
 lastUpdate  = 0
+lastUpdatePause = 0
 
 piece_a   = 30
 border_w  = 2
@@ -14,6 +15,8 @@ trollface = love.graphics.newImage("trollface.png")
 NOTHING   = 0
 SNAKE     = 1
 APPLE     = 2
+pause     = false
+pause_change = false
 
 function drawPiece(x, y, type)
     x = margin + piece_a * (x - 1)
@@ -128,15 +131,26 @@ function snakeUpdate(dt)
             newdir = { 0, -1 }
         end
     end
+    if not pause_change and love.keyboard.isDown("p") then
+	pause_change =  true
+    end
 
     if love.timer.getTime() - lastUpdate >= 0.1 then
-        direction = newdir
-        movesnake()
-        lastUpdate = love.timer.getTime()
-        if hasapple == false then
-            putapple()
-            hasapple = true
-        end
+	if pause_change and love.timer.getTime() - lastUpdatePause >= 0.5 then
+	    pause = not pause
+	    pause_change = false
+	    lastUpdatePause = love.timer.getTime()
+	end
+	if not pause then
+            direction = newdir
+            movesnake()
+            if hasapple == false then
+        	putapple()
+		hasapple = true
+	    end
+	end
+	lastUpdate = love.timer.getTime()
+	pause_change = false
     end
 end
 
