@@ -33,7 +33,8 @@ function reset()
             map[i][j] = NOTHING
         end
     end
-    new = { }
+    direction = {1, 0}
+    newdir = {1, 0}
     love.update = snakeUpdate
 end
 
