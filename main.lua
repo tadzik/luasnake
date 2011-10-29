@@ -7,15 +7,15 @@ lastUpdatePause = 0
 piece_a   = 30
 border_w  = 2
 margin    = 10
-height    = 20
-width     = 20
+height    = 3
+width     = 3
 window_h  = 640
 window_w  = 640
 trollface = love.graphics.newImage("trollface.png")
 NOTHING   = 0
 SNAKE     = 1
 APPLE     = 2
-STR_SPEED = 0.1
+STR_SPEED = 0.5
 pause     = false
 pause_change = false
 speed     = STR_SPEED
@@ -33,7 +33,7 @@ function reset(reset_points)
 	point_m = 1
     end
     justate 	= false
-    hasapple	= false
+    hasapple    = false
     snake 	= { { 1, 1 }, { 1, 2 } }
 --    snake	= { { 5, 5 }, { 6, 5}, { 7, 5 }, { 8, 5 }, { 9, 5 } }
     drawSurface = drawMap
@@ -45,6 +45,8 @@ function reset(reset_points)
     end
     direction = {0, 1}
     newdir = {0, 1}
+    drawSurface()
+    putapple()
     love.update = snakeUpdate
 end
 
@@ -117,6 +119,7 @@ function putapple()
         local y = math.random(1, height)
         if map[y][x] == 0 then
             map[y][x] = APPLE
+	    hasapple = true
             break
         end
     end
@@ -161,7 +164,6 @@ function snakeUpdate(dt)
             movesnake()
             if hasapple == false then
         	putapple()
-		hasapple = true
 	    end
 	end
 	lastUpdate = love.timer.getTime()
