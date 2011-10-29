@@ -77,7 +77,7 @@ function movesnake()
 end
 
 function putapple()
-    while not hasapple do
+    while true do
         local x = math.random(1, width)
         local y = math.random(1, height)
         if map[y][x] == 0 then
