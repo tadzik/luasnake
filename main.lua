@@ -15,8 +15,10 @@ trollface = love.graphics.newImage("trollface.png")
 NOTHING   = 0
 SNAKE     = 1
 APPLE     = 2
+STR_SPEED = 0.1
 pause     = false
 pause_change = false
+speed     = STR_SPEED
 
 function drawPiece(x, y, type)
     x = margin + piece_a * (x - 1)
@@ -24,11 +26,16 @@ function drawPiece(x, y, type)
     love.graphics.rectangle(type, x, y, piece_a, piece_a)
 end
 
-function reset()
-    points  	= 0
+function reset(reset_points)
+    if reset_points then
+        points  = 0
+	speed   = STR_SPEED
+	point_m = 1
+    end
     justate 	= false
     hasapple	= false
-    snake	= { { 5, 5 }, { 6, 5}, { 7, 5 }, { 8, 5 }, { 9, 5 } }
+    snake 	= { { 1, 1 }, { 1, 2 } }
+--    snake	= { { 5, 5 }, { 6, 5}, { 7, 5 }, { 8, 5 }, { 9, 5 } }
     drawSurface = drawMap
     for i = 1, height do
         map[i] = {}
@@ -36,8 +43,8 @@ function reset()
             map[i][j] = NOTHING
         end
     end
-    direction = {1, 0}
-    newdir = {1, 0}
+    direction = {0, 1}
+    newdir = {0, 1}
     love.update = snakeUpdate
 end
 
@@ -83,20 +90,28 @@ function movesnake()
 		if love.keyboard.isDown("q") then
 			love.event.push("q")
 		elseif love.keyboard.isDown("r") then
-			reset()
+			reset(true)
 		end
 	end
 	drawSurface = drawTrollface
     elseif map[new[2]][new[1]] == APPLE then
         justate  = true
         hasapple = false
-        points   = points + 1
+        points   = points + (1 * point_m)
     end
 
     table.insert(snake, new)
 end
 
 function putapple()
+    if table.maxn(snake) >= width * height then
+	reset(false)
+	speed = speed / 2
+	point_m = point_m * 2
+	if speed < 0.02 then
+	    speed = 0.02 --max speed
+	end
+    end
     while not hasapple do
         local x = math.random(1, width)
         local y = math.random(1, height)
@@ -109,7 +124,7 @@ end
 
 function love.load()
     math.randomseed(os.time())
-    reset()
+    reset(true)
     
     love.graphics.setMode(window_w, window_h)
     love.graphics.setBackgroundColor(200, 200, 200)
@@ -135,7 +150,7 @@ function snakeUpdate(dt)
 	pause_change =  true
     end
 
-    if love.timer.getTime() - lastUpdate >= 0.1 then
+    if love.timer.getTime() - lastUpdate >= speed then
 	if pause_change and love.timer.getTime() - lastUpdatePause >= 0.5 then
 	    pause = not pause
 	    pause_change = false
