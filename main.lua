@@ -82,11 +82,6 @@ function movesnake()
     or map[new[2]][new[1]] == SNAKE
     then
         love.update = function()
-            if love.keyboard.isDown("q") then
-                love.event.push("q")
-            elseif love.keyboard.isDown("r") then
-                reset()
-            end
         end
         drawSurface = drawTrollface
     elseif map[new[2]][new[1]] == APPLE then
@@ -119,21 +114,29 @@ function love.load()
     love.graphics.setLineWidth(border_w)
 end
 
-function snakeUpdate(dt)
+function love.keypressed(key)
     if direction[1] == 0 then
-        if love.keyboard.isDown("left") then
+        if key == "left" then
             newdir = { -1, 0 }
-        elseif love.keyboard.isDown("right") then
+        elseif key == "right" then
             newdir = { 1, 0 }
         end
     else
-        if love.keyboard.isDown("up") then
+        if key == "up" then
             newdir = { 0, 1 }
-        elseif love.keyboard.isDown("down") then
+        elseif key == "down" then
             newdir = { 0, -1 }
         end
     end
 
+    if key == "q" then
+        love.event.push("q")
+    elseif key == "r" then
+        reset()
+    end
+end
+
+function snakeUpdate(dt)
     if love.timer.getTime() - lastUpdate >= 0.1 then
         direction = newdir
         movesnake()
