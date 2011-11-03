@@ -1,8 +1,13 @@
 map         = {}
-direction   = { 1, 0 }
+snake       = {}
+direction   = {}
 newdir      = direction
 lastUpdate  = 0
+points      = 0
+justate     = false
+hasapple    = false
 
+-- "constants"
 piece_a   = 30
 border_w  = 2
 margin    = 10
@@ -22,10 +27,10 @@ function drawPiece(x, y, type)
 end
 
 function reset()
-    points  	= 0
-    justate 	= false
-    hasapple	= false
-    snake	= { { 5, 5 }, { 6, 5}, { 7, 5 }, { 8, 5 }, { 9, 5 } }
+    points      = 0
+    justate     = false
+    hasapple    = false
+    snake       = { { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 } }
     drawSurface = drawMap
     for i = 1, height do
         map[i] = {}
@@ -33,8 +38,8 @@ function reset()
             map[i][j] = NOTHING
         end
     end
-    direction = {1, 0}
-    newdir = {1, 0}
+    direction   = { 1, 0 }
+    newdir      = { 1, 0 }
     love.update = snakeUpdate
 end
 
@@ -77,13 +82,13 @@ function movesnake()
     or map[new[2]][new[1]] == SNAKE
     then
         love.update = function()
-		if love.keyboard.isDown("q") then
-			love.event.push("q")
-		elseif love.keyboard.isDown("r") then
-			reset()
-		end
-	end
-	drawSurface = drawTrollface
+            if love.keyboard.isDown("q") then
+                love.event.push("q")
+            elseif love.keyboard.isDown("r") then
+                reset()
+            end
+        end
+        drawSurface = drawTrollface
     elseif map[new[2]][new[1]] == APPLE then
         justate  = true
         hasapple = false
