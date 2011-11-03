@@ -40,7 +40,7 @@ function reset()
     end
     direction   = { 1, 0 }
     newdir      = { 1, 0 }
-    love.update = snakeUpdate
+    love.update = gameUpdate
 end
 
 function drawMap()
@@ -66,7 +66,7 @@ function drawTrollface()
     love.graphics.setColorMode("modulate")
 end
 
-function movesnake()
+function moveSnake()
     if justate == false then
         local tail = table.remove(snake, 1)
         map[tail[2]][tail[1]] = NOTHING
@@ -93,7 +93,7 @@ function movesnake()
     table.insert(snake, new)
 end
 
-function putapple()
+function putApple()
     while true do
         local x = math.random(1, width)
         local y = math.random(1, height)
@@ -136,13 +136,13 @@ function love.keypressed(key)
     end
 end
 
-function snakeUpdate(dt)
+function gameUpdate(dt)
     if love.timer.getTime() - lastUpdate >= 0.1 then
         direction = newdir
-        movesnake()
+        moveSnake()
         lastUpdate = love.timer.getTime()
         if hasapple == false then
-            putapple()
+            putApple()
             hasapple = true
         end
     end
