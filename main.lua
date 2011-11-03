@@ -133,6 +133,12 @@ function love.keypressed(key)
         love.event.push("q")
     elseif key == "r" then
         reset()
+    elseif key == "p" then
+        if love.update == gameUpdate then
+            love.update = function() end
+        else
+            love.update = gameUpdate
+        end
     end
 end
 
